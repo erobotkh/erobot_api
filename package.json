@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "name": "erobot_api",
   "version": "1.0.0",
   "description": "Backend for Erobot Application",
@@ -22,6 +23,9 @@
   },
   "homepage": "https://github.com/erobot-dev/erobot_api#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "mongodb": "^4.1.1",
+    "mongoose": "^6.0.0"
   }
 }
