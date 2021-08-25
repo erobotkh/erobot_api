@@ -1,0 +1,27 @@
+{
+  "name": "erobot_api",
+  "version": "1.0.0",
+  "description": "Backend for Erobot Application",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "server": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/erobot-dev/erobot_api.git"
+  },
+  "keywords": [
+    "node"
+  ],
+  "author": "erobot",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/erobot-dev/erobot_api/issues"
+  },
+  "homepage": "https://github.com/erobot-dev/erobot_api#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
