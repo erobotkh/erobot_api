@@ -23,10 +23,12 @@
   },
   "homepage": "https://github.com/erobot-dev/erobot_api#readme",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "express-async-handler": "^1.1.4",
     "jsonapi-serializer": "^3.6.7",
+    "jsonwebtoken": "^8.5.1",
     "mongodb": "^4.1.1",
     "mongoose": "^6.0.0",
     "mongoose-paginate-v2": "^1.4.2",
