@@ -1,4 +1,4 @@
-  
+
 import mongoose from 'mongoose'
 import normalize from 'normalize-mongoose'
 import mongoosePaginate from 'mongoose-paginate-v2';
@@ -12,10 +12,7 @@ const postSchema = mongoose.Schema(
     author: { type: mongoose.Types.ObjectId, ref: User },
   },
   {
-    timestamps: {
-      createdAt: 'created_at',
-      updatedAt: 'updated_at',
-    },
+    timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }
   }
 )
 
