@@ -32,6 +32,7 @@
     "mongodb": "^4.1.1",
     "mongoose": "^6.0.0",
     "mongoose-paginate-v2": "^1.4.2",
-    "normalize-mongoose": "^0.0.1"
+    "normalize-mongoose": "^0.0.1",
+    "rand-token": "^1.0.1"
   }
 }

@@ -1,28 +1,31 @@
 
 import asyncHandler from 'express-async-handler'
 import bcryptjs from 'bcryptjs'
-import jsonwebtoken from 'jsonwebtoken'
 import User from '../models/user_model.js'
+import jsonwebtoken from 'jsonwebtoken'
+import { generateRefreshToken, generateToken } from '../utils/token_generator.js'
+
+const expiresIn = 7200;
 
 const register = () => asyncHandler(async (req, res) => {
   try {
     const { first_name, last_name, email, password } = req.body;
 
     if (!(email && password && first_name && last_name)) {
-      res.status(400).send("All input is required");
+      res.status(400).send({
+        message: "All input is required"
+      });
     }
 
-    // check if user already exist
-    // Validate if user exist in our database
     const oldUser = await User.findOne({ email });
 
     if (oldUser) {
-      return res.status(409).send("User Already Exist. Please Login");
+      return res.status(409).send({
+        message: "User Already Exist. Please Login",
+      });
     }
 
     const encryptedPassword = await bcryptjs.hash(password, 10);
-
-    // Create user in our database
     const user = await User.create({
       first_name,
       last_name,
@@ -30,59 +33,119 @@ const register = () => asyncHandler(async (req, res) => {
       password: encryptedPassword,
     });
 
-    // Create token
-    const token = jsonwebtoken.sign(
-      { user_id: user._id, email },
-      process.env.TOKEN_KEY,
-      { expiresIn: "2h" }
-    );
-
-    // save user token
-    user.token = token;
+    const accessToken = generateToken(
+      user._id,
+      user.email,
+      expiresIn,
+    )
+    const refreshToken = generateRefreshToken(
+      user._id,
+      user.email,
+    )
 
     res.status(201).json({
-      access_token: user.token,
-      token_type: "Bearer",
-      expires_in: 2 * 3600
-    });
+      access_token: accessToken,
+      refresh_token: refreshToken,
+      token_type: 'Bearer',
+      expires_in: expiresIn,
+      created_at: Date.now(),
+    })
   } catch (err) {
-    console.log(err);
+    res.status(500).send({
+      message: err,
+    })
   }
 })
 
 const login = () => asyncHandler(async (req, res) => {
-  // Our login logic starts here
   try {
-    // Get user input
     const { email, password } = req.body;
 
-    // Validate user input
     if (!(email && password)) {
-      res.status(400).send("All input is required");
+      res.status(400).send({
+        message: "All input is required"
+      });
     }
-    // Validate if user exist in our database
+
     const user = await User.findOne({ email });
 
     if (user && (await bcryptjs.compare(password, user.password))) {
-      const token = jsonwebtoken.sign(
-        { user_id: user._id, email },
-        process.env.TOKEN_KEY,
-        { expiresIn: "2h" }
-      );
+      const accessToken = generateToken(
+        user._id,
+        user.email,
+        expiresIn,
+      )
+      const refreshToken = generateRefreshToken(
+        user._id,
+        user.email,
+      )
 
-      // save user token
-      user.token = token;
+      await res.status(201).send({
+        access_token: accessToken,
+        refresh_token: refreshToken,
+        token_type: 'Bearer',
+        expires_in: expiresIn,
+        created_at: Date.now(),
+      })
 
-      res.status(200).json({
-        access_token: user.token,
-        token_type: "Bearer",
-        expires_in: 2 * 3600
-      });
+    } else {
+      res.status(400).send({
+        message: 'Invalid Credentials',
+      })
     }
-    res.status(400).send("Invalid Credentials");
   } catch (err) {
-    console.log(err);
+    res.status(500).send({
+      message: err,
+    })
   }
 })
 
-export { register, login }
+const refreshToken = () => asyncHandler(async (req, res) => {
+  if (req.body.grant_type === 'refresh_token') {
+    const token = req.body.refresh_token
+
+    if (!token) {
+      res.status(401).send({
+        message: 'Token not Found',
+      })
+    }
+
+
+    jsonwebtoken.verify(token, process.env.JWT_REFRESH_SECRET, (error, user) => {
+      if(error){
+        res.status(401).send({
+          message: 'Invalid Token',
+        })
+      } else {
+        req.user = user;
+      }
+    });
+
+    try {
+      const accessToken = generateToken(
+        req.user._id,
+        req.user.email,
+        expiresIn,
+      )
+
+      const refreshToken = generateRefreshToken(
+        req.user._id,
+        req.user.email,
+      )
+
+      res.status(201).json({
+        access_token: accessToken,
+        refresh_token: refreshToken,
+        token_type: 'Bearer',
+        expires_in: expiresIn,
+        created_at: Date.now(),
+      })
+    } catch (err) {
+      res.status(500).send({
+        message: err,
+      })
+    }
+  }
+})
+
+export { register, login, refreshToken }
