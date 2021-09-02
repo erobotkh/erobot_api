@@ -121,6 +121,8 @@ const refreshToken = () => asyncHandler(async (req, res) => {
       }
     });
 
+    if(!req.user) return
+
     try {
       const accessToken = generateToken(
         req.user._id,
@@ -133,7 +135,7 @@ const refreshToken = () => asyncHandler(async (req, res) => {
         req.user.email,
       )
 
-      res.status(201).json({
+      res.status(201).send({
         access_token: accessToken,
         refresh_token: refreshToken,
         token_type: 'Bearer',

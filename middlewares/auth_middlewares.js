@@ -1,4 +1,4 @@
-import jsonwebtoken, { decode } from 'jsonwebtoken'
+import jsonwebtoken from 'jsonwebtoken'
 import dotenv from 'dotenv'
 
 dotenv.config()
@@ -13,16 +13,9 @@ const verifyToken = (req, res, next) => {
   }
 
   const _token = token.split(" ")[1];
-
-  const { exp } = decode(_token);
-  if (Date.now() >= exp * 1000) {
-    return res.status(401).send({
-      message: "Token is expired",
-    });
-  }
   
   try {
-    const decoded = jsonwebtoken.verify(_token, process.env.TOKEN_KEY);
+    const decoded = jsonwebtoken.verify(_token, process.env.JWT_SECRET);
     req.user = decoded;
   } catch (err) {
     return res.status(401).send({
