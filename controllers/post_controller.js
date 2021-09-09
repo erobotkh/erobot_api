@@ -50,7 +50,7 @@ const fetchPosts = () => asyncHandler(async (req, res) => {
   })
 
   const _posts = PostsSerializer.serialize(posts.docs)
-  res.send(JSON.stringify(_posts))
+  res.send(_posts)
 })
 
 const fetchPostDetail = asyncHandler(async (req, res) => {
@@ -69,7 +69,7 @@ const fetchPostDetail = asyncHandler(async (req, res) => {
       ...relationshipAttributes(included)
     })
     const _post = PostsSerializer.serialize(post)
-    res.send(JSON.stringify(_post))
+    res.send(_post)
   } catch (error) {
     res.send({ message: "id not found" })
   }
