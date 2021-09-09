@@ -7,6 +7,6 @@ import {
 const router = express.Router();
 
 router.route('/').get(fetchPosts())
-router.route('/:id').get(fetchPostDetail)
+router.route('/:id').get(fetchPostDetail())
 
 export default router;

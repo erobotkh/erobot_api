@@ -53,7 +53,7 @@ const fetchPosts = () => asyncHandler(async (req, res) => {
   res.send(_posts)
 })
 
-const fetchPostDetail = asyncHandler(async (req, res) => {
+const fetchPostDetail = () => asyncHandler(async (req, res) => {
   const id = req.params.id
   const included = parseInt(req.query.included)
 
