@@ -5,7 +5,7 @@ dotenv.config()
 
 const generateToken = (id, email, expiresIn) => {
   return jsonwebtoken.sign({ id, email }, process.env.JWT_SECRET, {
-    expiresIn: expiresIn.toString(),
+    expiresIn: expiresIn
   })
 }
 
