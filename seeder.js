@@ -1,6 +1,8 @@
 import connectDB from './configs/db_configs.js'
-import Post from './models/posts_model.js'
+import Post from './models/post_model.js'
 import User from './models/user_model.js'
+import Reaction from './models/reaction_model.js'
+import Comment from './models/comment_model.js'
 import users from './examples/users_example.js'
 import posts from './examples/posts_example.js'
 
@@ -10,13 +12,15 @@ const createPost = async () => {
   try {
     await Post.deleteMany()
     await User.deleteMany()
+    await Reaction.deleteMany();
+    await Comment.deleteMany();
 
     let createUsers = await User.insertMany(users)
     let _posts = posts.map((post) => {
       let author = createUsers.find((user) => {
         return post.author.first_name == user.first_name
       })
-      return { ...post, author: author._id }
+      return { ...post, author: author._id, }
     })
 
     await Post.insertMany(_posts)
