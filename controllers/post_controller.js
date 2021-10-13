@@ -1,6 +1,7 @@
 import asyncHandler from 'express-async-handler'
 import Post from '../models/post_model.js'
 import jsonapiSerializer from 'jsonapi-serializer'
+import { getTopLevelLinks } from '../utils/link_pagination.js'
 
 var JSONAPISerializer = jsonapiSerializer.Serializer
 
@@ -36,6 +37,8 @@ const fetchPosts = () => asyncHandler(async (req, res) => {
 
   const posts = await Post.paginate({}, options)
 
+  console.log(req.url)
+
   const PostsSerializer = new JSONAPISerializer('posts', {
     attributes: attributes,
     keyForAttribute: 'snake_case',
@@ -46,10 +49,7 @@ const fetchPosts = () => asyncHandler(async (req, res) => {
       total_pages: posts.totalPages,
       current_page: posts.page,
     },
-    topLevelLinks: {
-      self: posts.page,
-      next: posts.nextPage,
-    },
+    topLevelLinks: getTopLevelLinks(posts, req),
     ...relationshipAttributes(included)
   })
 
