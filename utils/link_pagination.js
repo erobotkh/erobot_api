@@ -27,4 +27,13 @@ const getTopLevelLinks = (docs, req) => {
   }
 }
 
-export { getUrl, getTopLevelLinks }
+const getMeta = (docs, req) => {
+  return  {
+    count: docs.limit,
+    total_count: docs.totalDocs,
+    total_pages: docs.totalPages,
+    current_page: docs.page,
+  }
+}
+
+export { getUrl, getTopLevelLinks, getMeta }
