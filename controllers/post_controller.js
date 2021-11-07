@@ -14,9 +14,22 @@ const fetchPosts = () => asyncHandler(async (req, res) => {
   }
 
   const posts = await Post.paginate({}, options)
-  const _posts = buildItemsSerializer(posts, Post.schema, req, {
-    'author': User.schema,
-    'images': Post.schema.obj.images[0]
+  const _posts = buildItemsSerializer({
+    items: posts,
+    attributeSchema: Post.schema,
+    request: req,
+    relationships: {
+      'author': User.schema,
+      'images': Post.schema.obj.images[0]
+    },
+    additionalAttributes: [
+      'comment_count',
+      'reaction_count'
+    ],
+    excludeAttributes: [
+      'comments',
+      'reactions',
+    ],
   })
 
   res.send(_posts)
@@ -31,10 +44,23 @@ const fetchPostDetail = () => asyncHandler(async (req, res) => {
   }
 
   try {
-    const post = await Post.findById(id).populate('author').populate('comments')
-    const _post = buildObjectSerializer(post, Post.schema, req, {
-      'author': User.schema,
-      'images': Post.schema.obj.images[0]
+    const post = await Post.findById(id).populate('author')
+    const _post = buildObjectSerializer({
+      item: post,
+      attributeSchema: Post.schema,
+      request: req,
+      relationships: {
+        'author': User.schema,
+        'images': Post.schema.obj.images[0]
+      },
+      additionalAttributes: [
+        'comment_count',
+        'reaction_count'
+      ],
+      excludeAttributes: [
+        'comments',
+        'reactions',
+      ],
     })
     res.send(_post)
   } catch (error) {

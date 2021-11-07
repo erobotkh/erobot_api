@@ -35,19 +35,23 @@ const postSchema = mongoose.Schema(
   }
 )
 
+
 postSchema.virtual('comment_count', {
   ref: Comment,
   localField: 'comments',
-  foreignField: '_id',
+  foreignField: '',
   count: true,
 })
 
-postSchema.virtual('reaction_count', {
-  ref: Reaction,
-  localField: 'reactions',
-  foreignField: '_id',
-  count: true,
-})
+postSchema.virtual('comment_count')
+  .get(function () {
+    return this.comments.length
+  })
+  
+postSchema.virtual('reaction_count')
+  .get(function () {
+    return this.reactions.length
+  })
 
 postSchema.set('toObject', { virtuals: true })
 postSchema.set('toJSON', { virtuals: true })
