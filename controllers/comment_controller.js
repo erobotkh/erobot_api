@@ -15,8 +15,13 @@ const fetchComments = (req, res) => asyncHandler(async (req, res) => {
   }
 
   const comments = await Comment.paginate({}, options)
-  const _comments = buildItemsSerializer(comments, Comment.schema, req, {
-    'user': User.schema,
+  const _comments = buildItemsSerializer({
+    items: comments,
+    attributeSchema: Comment.schema,
+    request: req,
+    relationships: {
+      'user': User.schema,
+    },
   })
 
   res.send(_comments)
@@ -45,8 +50,13 @@ const fetchCommentsPerPost = () => asyncHandler(async (req, res) => {
   }
 
   const comments = await Comment.paginate(filter, options)
-  const _comments = buildItemsSerializer(comments, Comment.schema, req, {
-    'user': User.schema,
+  const _comments = buildItemsSerializer({
+    items: comments,
+    attributeSchema: Comment.schema,
+    request: req,
+    relationships: {
+      'user': User.schema,
+    }
   })
 
   res.send(_comments)
