@@ -29,7 +29,7 @@ const getTopLevelLinks = (docs, req) => {
 
 const getMeta = (docs, req) => {
   return  {
-    count: docs.limit,
+    count: docs.docs.length,
     total_count: docs.totalDocs,
     total_pages: docs.totalPages,
     current_page: docs.page,
