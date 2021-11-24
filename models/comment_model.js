@@ -8,10 +8,7 @@ const commentSchema = mongoose.Schema(
     type: { type: String, default: 'comment' },
     user: { type: mongoose.Types.ObjectId, ref: User },
     comment: { type: String, required: true },
-    post: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Post'
-    },
+    post: { type: mongoose.Schema.Types.ObjectId, ref: 'Post' },
   },
   {
     timestamps: {
@@ -24,5 +21,5 @@ const commentSchema = mongoose.Schema(
 commentSchema.plugin(normalize)
 commentSchema.plugin(mongoosePaginate);
 
-const Comment = mongoose.model('Comments', commentSchema)
+const Comment = mongoose.model('Comment', commentSchema)
 export default Comment
