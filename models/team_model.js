@@ -4,6 +4,7 @@ import mongoosePaginate from 'mongoose-paginate-v2'
 
 const teamSchema = mongoose.Schema(
   {
+    id: { type: String, required: true },
     type: { type: String, default: 'team' },
     name: { type: String, required: true },
   },

@@ -1,21 +1,12 @@
 import mongoose from 'mongoose'
 import normalize from 'normalize-mongoose'
 import mongoosePaginate from 'mongoose-paginate-v2'
+import socialSchema from './schema/social_schema.js'
 import Team from './team_model.js'
-
-const socialSchema = mongoose.Schema(
-  {
-    provider: {
-      type: String,
-      enum: ['google', 'telegram', 'facebook', 'phone'],
-      required: true,
-    },
-    href: { type: String, unique: true },
-  },
-)
 
 const memberSchema = mongoose.Schema(
   {
+    id: { type: String, required: true },
     type: { type: String, default: 'member' },
     role: {
       type: String,
