@@ -23,8 +23,10 @@
   },
   "homepage": "https://github.com/erobot-dev/erobot_api#readme",
   "dependencies": {
+    "axios": "^0.25.0",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^1.26.3",
+    "convert-csv-to-array": "^1.0.3",
     "dotenv": "^10.0.0",
     "ejs": "^3.1.6",
     "express": "^4.17.1",
