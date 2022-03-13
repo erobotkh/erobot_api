@@ -67,14 +67,16 @@ const login = () => asyncHandler(async (req, res) => {
       });
     }
 
-    const user = await User.findOne({ email });
-
-    if (user && (await bcryptjs.compare(password, user.password))) {
+    const user = await User.findOne({ email }).select('+password');
+    const matched = await bcryptjs.compare(password, user.password)
+    
+    if (user && matched) {
       const accessToken = generateToken(
         user._id,
         user.email,
         expiresIn,
       )
+
       const refreshToken = generateRefreshToken(
         user._id,
         user.email,
@@ -112,7 +114,7 @@ const refreshToken = () => asyncHandler(async (req, res) => {
 
 
     jsonwebtoken.verify(token, process.env.JWT_REFRESH_SECRET, (error, user) => {
-      if(error){
+      if (error) {
         res.status(401).send({
           message: 'Invalid Token',
         })
@@ -121,7 +123,7 @@ const refreshToken = () => asyncHandler(async (req, res) => {
       }
     });
 
-    if(!req.user) return
+    if (!req.user) return
 
     try {
       const accessToken = generateToken(
