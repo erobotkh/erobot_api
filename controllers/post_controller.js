@@ -91,7 +91,7 @@ const createPost = () => asyncHandler(async (req, res) => {
     const post = Post.create(filterOutNullUndefine(createQuery))
     res.send({
       message: "Post created successfully",
-      response: post
+      debug: post
     })
   } catch (error) {
     res.status(500).send({
@@ -113,7 +113,7 @@ const updatePost = () => asyncHandler(async (req, res) => {
     const post = await req.old_post.update(filterOutNullUndefine(updateQuery))
     res.send({
       message: "Post updated successfully",
-      response: post
+      debug: post
     })
   } catch (error) {
     res.status(500).send({

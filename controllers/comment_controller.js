@@ -108,7 +108,7 @@ const updateComment = () => asyncHandler(async (req, res) => {
     const response = await req.old_comment.update({ comment })
     res.send({
       message: 'Comment updated',
-      response: response
+      debug: response
     })
   } catch (error) {
     res.send({
@@ -128,7 +128,7 @@ const deleteComment = () => asyncHandler(async (req, res) => {
 
       res.send({
         message: 'Comment deleted',
-        response: response
+        debug: response
       })
     } else {
       res.send({
@@ -138,7 +138,7 @@ const deleteComment = () => asyncHandler(async (req, res) => {
   } catch (error) {
     res.send({
       message: 'Delete comment fail',
-      response: error,
+      debug: error,
     })
   }
 })

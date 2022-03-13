@@ -36,7 +36,7 @@ const createCategory = () => asyncHandler(async (req, res) => {
   if (response) {
     res.send({
       message: 'Category created',
-      response: response,
+      debug: response,
     })
   } else {
     res.send({
@@ -61,7 +61,7 @@ const updateCategory = () => asyncHandler(async (req, res) => {
     const response = await old_category.update({ name: category_name })
     res.send({
       message: 'Category updated',
-      response: response
+      debug: response
     })
   } catch (error) {
     res.send({
@@ -78,12 +78,12 @@ const deleteCategory = () => asyncHandler(async (req, res) => {
     const response = await old_category.delete()
     res.send({
       message: 'Delete deleted',
-      response: response
+      debug: response
     })
   } catch (error) {
     res.send({
       message: 'Delete category fail',
-      response: error,
+      debug: error,
     })
   }
 })
