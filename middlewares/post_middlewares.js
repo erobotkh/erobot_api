@@ -5,9 +5,9 @@ import mongoose from "mongoose";
 dotenv.config()
 
 const verifyPostOwnership = async (req, res, next) => {
-  const comment_id = req.params.id
+  const post_id = req.params.id
   const user_id = req.user.id
-  const old_post = await Post.findById(comment_id)
+  const old_post = await Post.findById(post_id)
 
   if (!old_post) {
     return res.status(404).send({

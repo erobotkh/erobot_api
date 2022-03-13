@@ -20,6 +20,14 @@ app.use('/comments', commentRoutes)
 app.use('/members', memberRoutes)
 app.use('/categories', categoryRoute)
 
+app.use((error, req, res, next) => {
+  res.send({
+    message: 'Something fail',
+    error: error,
+  })
+})
+
+
 app.get('/email_template', renderEmailTemplate());
 
 const PORT = process.env.PORT || 3000

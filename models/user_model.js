@@ -16,8 +16,10 @@ const userSchema = mongoose.Schema(
     last_name: { type: String, default: null },
     profile_url: { type: String, default: null },
     email: { type: String, unique: true },
-    password: String,
     member: { type: mongoose.Types.ObjectId, ref: Member },
+    // select: false so it won't return.
+    // Note: use +password to get it: Users.findById(id).select('+password')
+    password: { type: String, select: false },
   },
   {
     timestamps: {

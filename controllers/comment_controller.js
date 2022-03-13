@@ -62,7 +62,7 @@ const fetchCommentsPerPost = () => asyncHandler(async (req, res) => {
   res.send(_comments)
 })
 
-const createComment = () => asyncHandler(async (req, res) => {
+const createComment = () => asyncHandler(async (req, res, next) => {
   const post_id = req.body.post_id
   const comment = req.body.comment
   const user_id = req.user.id
@@ -73,9 +73,9 @@ const createComment = () => asyncHandler(async (req, res) => {
     })
     return;
   } else if (!comment) {
-    res.send({
-      message: 'Comment can\'t be empty',
-    })
+    let err = Error('Comment can\'t be empty'); // Sets error message, includes the requester's ip address!
+    err.statusCode = 403;
+    next(err)
     return;
   }
 
