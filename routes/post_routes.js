@@ -6,6 +6,7 @@ import {
   fetchPostDetail,
   createPost,
   updatePost,
+  toggleReaction,
 } from '../controllers/post_controller.js'
 
 import {
@@ -26,6 +27,9 @@ router.route('/')
 router.route('/:id')
   .get(verifyToken, fetchPostDetail())
   .put(verifyToken, verifyPostOwnership, validateCategoryId, updatePost())
+
+router.route('/:id/reactions')
+  .put(verifyToken, toggleReaction())
 
 router.route('/:id/comments').get(verifyToken, fetchCommentsPerPost())
 

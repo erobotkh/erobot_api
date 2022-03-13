@@ -7,11 +7,11 @@ const postReactionSchema = mongoose.Schema(
   {
     type: { type: String, default: 'reaction' },
     user: { type: mongoose.Types.ObjectId, ref: User, required: true },
-    post: { type: mongoose.Schema.Types.ObjectId, ref: 'Post' },
-    reactionType: {
+    post: { type: mongoose.Types.ObjectId, ref: 'Post' },
+    reaction_type: {
       type: String,
-      enum: ['like', 'love', 'dislike', 'none'],
-      default: 'none'
+      enum: ['like', 'love', 'dislike'],
+      default: 'like'
     },
   },
   {
