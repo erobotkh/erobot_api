@@ -2,19 +2,28 @@ import { getTopLevelLinks, getMeta } from '../utils/link_pagination.js'
 import jsonapiSerializer from 'jsonapi-serializer'
 const JSONAPISerializer = jsonapiSerializer.Serializer
 
+function distinctArray(arr) {
+  return [...new Set(arr)];
+}
+
 // Add, remove attribute from additionalAttributes, excludeAttributes 
 // & Remove attribute with '_' at first index. eg. _id
 function trimAttribute(args) {
   const attributeSchema = args['attributeSchema']
+
   const additionalAttributes = args['additionalAttributes'] || []
   const excludeAttributes = args['excludeAttributes'] || []
+  const virtualAttributes = Object.keys(attributeSchema.virtuals);
 
-  const attributes = Object.keys(attributeSchema.tree)
-  attributes.concat(additionalAttributes)
-  const _attributes = attributes.filter(arrayItem => {
+  let attributes = Object.keys(attributeSchema.tree)
+  attributes.push(...additionalAttributes)
+  attributes.push(...virtualAttributes)
+
+  let _attributes = attributes.filter(arrayItem => {
     return !excludeAttributes.includes(arrayItem) && !(arrayItem[0] === "_")
   });
 
+  _attributes = distinctArray(_attributes)
   return _attributes
 }
 
@@ -33,8 +42,7 @@ const serializedItems = buildItemsSerializer({
     'images': Post.schema.obj.images[0]
   },
   additionalAttributes: [
-    'comment_count',
-    'reaction_count'
+
   ],
   excludeAttributes: [
     'comments',
@@ -85,8 +93,7 @@ const serializedObject = buildObjectSerializer({
     'images': Post.schema.obj.images[0]
   },
   additionalAttributes: [
-    'comment_count',
-    'reaction_count'
+    
   ],
   excludeAttributes: [
     'comments',
@@ -108,7 +115,7 @@ function buildObjectSerializer(args) {
     keyForAttribute: 'snake_case',
     ...relationshipAttributes(request, relationships)
   })
-
+  
   return PostsSerializer.serialize(item)
 }
 

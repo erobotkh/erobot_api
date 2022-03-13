@@ -30,13 +30,9 @@ const fetchPosts = () => asyncHandler(async (req, res) => {
       'images': Post.schema.obj.images[0],
       'category': Category.schema,
     },
-    additionalAttributes: [
-      'comment_count',
-      'reaction_count'
-    ],
     excludeAttributes: [
       'comments',
-      'reactions',
+      // 'reactions',
     ],
   })
 
@@ -52,7 +48,9 @@ const fetchPostDetail = () => asyncHandler(async (req, res) => {
   }
 
   try {
-    const post = await Post.findById(id).populate(['author', 'category'])
+    let post = await Post.findById(id).populate(['author', 'category'])
+    let reacted = false;
+    
     const _post = buildObjectSerializer({
       item: post,
       attributeSchema: Post.schema,
@@ -62,10 +60,6 @@ const fetchPostDetail = () => asyncHandler(async (req, res) => {
         'images': Post.schema.obj.images[0],
         'category': Category.schema,
       },
-      additionalAttributes: [
-        'comment_count',
-        'reaction_count'
-      ],
       excludeAttributes: [
         'comments',
         // 'reactions',
