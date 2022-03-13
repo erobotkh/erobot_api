@@ -44,12 +44,20 @@ postSchema.virtual('comment_count', {
 
 postSchema.virtual('comment_count')
   .get(function () {
-    return this.comments.length
+    if (this.comments) {
+      return this.comments.length
+    } else {
+      return 0;
+    }
   })
 
 postSchema.virtual('reaction_count')
   .get(function () {
-    return this.reactions.length
+    if (this.reactions) {
+      return this.reactions.length
+    } else {
+      return 0;
+    }
   })
 
 postSchema.set('toObject', { virtuals: true })
