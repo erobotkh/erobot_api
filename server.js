@@ -5,6 +5,7 @@ import postRoutes from './routes/post_routes.js'
 import commentRoutes from './routes/comment_routes.js'
 import memberRoutes from './routes/member_routes.js'
 import categoryRoute from './routes/category_route.js'
+import bookmarkRoute from './routes/bookmark_routes.js'
 import authRoutes from './routes/auth_routes.js'
 import renderEmailTemplate from './controllers/email_template_controller.js'
 
@@ -19,6 +20,7 @@ app.use('/posts', postRoutes)
 app.use('/comments', commentRoutes)
 app.use('/members', memberRoutes)
 app.use('/categories', categoryRoute)
+app.use('/user/bookmarks', bookmarkRoute)
 
 app.use((error, req, res, next) => {
   res.send({
