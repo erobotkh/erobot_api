@@ -9,6 +9,7 @@ import { buildItemsSerializer, buildObjectSerializer } from '../utils/json_seria
 import { findHashtags } from '../utils/hashtags_extractor.js'
 import { filterOutNullUndefine } from '../utils/utils.js'
 import PostReaction from '../models/post_reaction_model.js'
+import Bookmark from '../models/bookmark_model.js'
 
 const fetchPosts = () => asyncHandler(async (req, res) => {
   const per_page = parseInt(req.query.per_page) || 20
@@ -41,6 +42,7 @@ const fetchPosts = () => asyncHandler(async (req, res) => {
 
 const fetchPostDetail = () => asyncHandler(async (req, res) => {
   const id = req.params.id;
+  const user_id = req.user.id;
 
   if (!id) {
     res.send({ message: 'id not found' })
@@ -49,9 +51,22 @@ const fetchPostDetail = () => asyncHandler(async (req, res) => {
 
   try {
     let post = await Post.findById(id).populate(['author', 'category'])
-    let reacted = false;
+    let bookmark = null;
+    let reaction = null;
 
-    const _post = buildObjectSerializer({
+    if(user_id){
+      bookmark = await Bookmark.find({
+        user: user_id,
+        post: id,
+      })
+      reaction = await PostReaction.find({
+        user: user_id,
+        post: id,
+      })
+    }
+
+
+    let _post = buildObjectSerializer({
       item: post,
       attributeSchema: Post.schema,
       request: req,
@@ -62,9 +77,14 @@ const fetchPostDetail = () => asyncHandler(async (req, res) => {
       },
       excludeAttributes: [
         'comments',
-        // 'reactions',
+        'reactions',
+        'id'
       ],
     })
+
+    _post["data"]["attributes"]["reacted"] = reaction != null
+    _post["data"]["attributes"]["bookmarked"] = bookmark != null
+    
     res.send(_post)
   } catch (error) {
     res.send({ message: "id not found" })
