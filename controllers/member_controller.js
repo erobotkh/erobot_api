@@ -97,7 +97,7 @@ const refreshMembers = () => asyncHandler(async (req, res) => {
     let team = await Team.findOne({ 'id': obj.team })
 
     const member = {
-      "id": obj.id,
+      "username": obj.id,
       "role": obj.role,
       "first_name": obj.first_name,
       "last_name": obj.last_name,
