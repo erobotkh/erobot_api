@@ -6,7 +6,7 @@ import Team from './team_model.js'
 
 const memberSchema = mongoose.Schema(
   {
-    id: { type: String, required: true },
+    username: { type: String, required: true },
     type: { type: String, default: 'member' },
     role: {
       type: String,
