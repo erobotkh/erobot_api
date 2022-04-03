@@ -50,7 +50,7 @@ const fetchPostDetail = () => asyncHandler(async (req, res) => {
   try {
     let post = await Post.findById(id).populate(['author', 'category'])
     let reacted = false;
-    
+
     const _post = buildObjectSerializer({
       item: post,
       attributeSchema: Post.schema,

@@ -93,8 +93,8 @@ const refreshMembers = () => asyncHandler(async (req, res) => {
         "href": obj.phone,
       }
     }
-    
-    let team = await Team.findOne({'id': obj.team})
+
+    let team = await Team.findOne({ 'id': obj.team })
 
     const member = {
       "id": obj.id,
